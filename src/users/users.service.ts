@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { ErrorsMap } from 'src/common/errors.const';
 
-import { UserDto } from './user.dto';
-import { User } from './user.entity';
+import { UserDto } from './users.dto';
+import { User } from './users.entity';
 
 @Injectable()
 export class UsersService {
@@ -41,8 +41,10 @@ export class UsersService {
   }
 
   async findAll(): Promise<User> {
-    return this.userModel.findAndCountAll({
+    const users = await this.userModel.findAndCountAll({
       raw: true
     });
+
+    return users;
   }
 }

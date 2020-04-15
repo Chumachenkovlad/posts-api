@@ -1,6 +1,7 @@
 import { SequelizeModuleOptions, SequelizeOptionsFactory } from '@nestjs/sequelize';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
+import { User } from 'src/users/users.entity';
 
 import { ConfigKeys } from './config.const';
 
@@ -46,7 +47,10 @@ export class ConfigService implements SequelizeOptionsFactory {
       port: 3306,
       username: this.get(ConfigKeys.DB_USERNAME),
       password: this.get(ConfigKeys.DB_PASSWORD),
-      database: this.get(ConfigKeys.DB_DATABASE)
+      database: this.get(ConfigKeys.DB_DATABASE),
+      models: [User],
+      autoLoadModels: true,
+      synchronize: true
     };
   }
 }

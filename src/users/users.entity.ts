@@ -113,3 +113,10 @@ export class User extends Model<User> {
     }
   }
 }
+
+@ObjectType()
+export class PaginatedUsers {
+  rows: User[];
+  @Field(() => Int)
+  count: number;
+}
