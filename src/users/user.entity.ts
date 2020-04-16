@@ -14,7 +14,8 @@ import {
     Table,
     Unique
 } from 'sequelize-typescript';
-import { ErrorsMap } from 'src/common/errors.const';
+
+import { ErrorsMap } from '../common/const/errors.const';
 
 const DEFAULT_BYTE_SIZE = 16;
 const DEFAULT_ITERATIONS = 10000;

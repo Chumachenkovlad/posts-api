@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
-import { ErrorsMap } from 'src/common/errors.const';
 
-import { UserDto } from './users.dto';
-import { User } from './users.entity';
+import { ErrorsMap } from '../common/const/errors.const';
+import { User } from './user.entity';
+import { UsersDto } from './users.dto';
 
 @Injectable()
 export class UsersService {
@@ -14,11 +14,11 @@ export class UsersService {
     private sequelize: Sequelize
   ) {}
 
-  async create(userDto: UserDto): Promise<User> {
+  async create(userDto: UsersDto): Promise<User> {
     return this.userModel.create(userDto, { raw: true });
   }
 
-  async update(id: number, userDto: UserDto): Promise<User> {
+  async update(id: number, userDto: UsersDto): Promise<User> {
     const user = await this.findById(id);
 
     if (!user) {

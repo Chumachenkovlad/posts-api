@@ -2,8 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthPayload {
+  token: String!
+  expires: String!
+  user: User!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
-  createUser(email: String!, username: String!, password: String!): User!
+  createUser(userInput: UserInput!): User!
+  login(loginInput: LoginInput!): AuthPayload!
+  register(registerInput: RegisterInput!): AuthPayload!
 }
 
 type PaginatedUsers {
@@ -14,10 +27,23 @@ type PaginatedUsers {
 type Query {
   user(id: Int!): User!
   users: PaginatedUsers!
+  whoAmI: User!
+}
+
+input RegisterInput {
+  email: String!
+  username: String!
+  password: String!
 }
 
 type User {
   id: Int!
   username: String!
   email: String!
+}
+
+input UserInput {
+  email: String!
+  username: String!
+  password: String!
 }
