@@ -6,7 +6,6 @@ import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
-import { PostsModule } from './posts/posts.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -20,7 +19,7 @@ import { UsersModule } from './users/users.module';
       useExisting: ConfigService
     }),
     ConfigModule,
-    PostsModule,
+    //PostsModule,
     UsersModule,
     AuthModule
   ],

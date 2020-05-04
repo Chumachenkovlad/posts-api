@@ -1,26 +1,28 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import { Sequelize } from 'sequelize-typescript';
 
-import { Post } from './models/post.model';
+import { BaseEntityService } from '../common/base/base-entity.service';
+import { SortingDto } from './../common/dto/sorting.dto';
+import { PostDto, PostsFilter } from './post.dto';
+import { Post } from './post.entity';
 
 @Injectable()
-export class PostsService {
-  private posts: Post[] = [
-    { id: 1, title: 'title1', votes: 0 },
-    { id: 2, title: 'title2', votes: 0 },
-    { id: 3, title: 'title3', votes: 0 }
-  ];
+export class PostsService extends BaseEntityService<
+  Post,
+  PostDto,
+  PostsFilter
+> {
+  protected defaultSorting: SortingDto = {
+    prop: 'title',
+    direction: 'DESC'
+  };
 
-  async findOneById(id: number) {
-    return this.posts.find(post => post.id === id);
-  }
-
-  async findAll(query: { authorId: number }) {
-    return this.posts;
-  }
-
-  async upvoteById({ id }: { id: number }) {
-    const post = await this.findOneById(id);
-    post.votes += 1;
-    return post;
+  constructor(
+    @InjectModel(Post)
+    model: typeof Post,
+    sequelize: Sequelize
+  ) {
+    super(model, sequelize);
   }
 }

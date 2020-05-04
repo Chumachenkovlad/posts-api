@@ -1,50 +1,26 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 
-import { ErrorsMap } from '../common/const/errors.const';
+import { BaseEntityService } from '../common/base/base-entity.service';
 import { User } from './user.entity';
-import { UsersDto } from './users.dto';
+import { UsersDto, UsersFilter } from './users.dto';
 
 @Injectable()
-export class UsersService {
+export class UsersService extends BaseEntityService<
+  User,
+  UsersDto,
+  UsersFilter
+> {
   constructor(
     @InjectModel(User)
-    private userModel: typeof User,
-    private sequelize: Sequelize
-  ) {}
-
-  async create(userDto: UsersDto): Promise<User> {
-    return this.userModel.create(userDto, { raw: true });
-  }
-
-  async update(id: number, userDto: UsersDto): Promise<User> {
-    const user = await this.findById(id);
-
-    if (!user) {
-      throw new NotFoundException(ErrorsMap.USER_NOT_FOUND);
-    }
-
-    await this.sequelize.transaction(async transaction => {
-      await user.set(userDto).save({ transaction });
-    });
-
-    return this.findById(id);
-  }
-
-  async findById(id: number): Promise<User> {
-    return this.userModel.findOne({ where: { id } });
+    model: typeof User,
+    sequelize: Sequelize
+  ) {
+    super(model, sequelize);
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.userModel.findOne({ where: { email } });
-  }
-
-  async findAll(): Promise<User> {
-    const users = await this.userModel.findAndCountAll({
-      raw: true
-    });
-
-    return users;
+    return this.model.findOne({ where: { email } });
   }
 }
