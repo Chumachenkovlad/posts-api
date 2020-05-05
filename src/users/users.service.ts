@@ -4,7 +4,8 @@ import { Sequelize } from 'sequelize-typescript';
 
 import { BaseEntityService } from '../common/base/base-entity.service';
 import { User } from './user.entity';
-import { UsersDto, UsersFilter } from './users.dto';
+import { UsersFilter } from './users-filter.dto';
+import { UsersDto } from './users.dto';
 
 @Injectable()
 export class UsersService extends BaseEntityService<

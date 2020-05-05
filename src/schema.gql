@@ -2,38 +2,31 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type AuthPayload {
-  token: String!
-  expires: String!
-  user: User!
-}
-
-input LoginInput {
-  email: String!
-  password: String!
+type EntitiesListRes {
+  filter: UsersFilter
+  rows: [User!]
+  sorting: SortingDto
+  pagination: PaginationDto
 }
 
 type Mutation {
   createUser(userInput: UserInput!): User!
-  login(loginInput: LoginInput!): AuthPayload!
-  register(registerInput: RegisterInput!): AuthPayload!
 }
 
-type PaginatedUsers {
+type PaginationDto {
   count: Int!
-  rows: [User!]!
+  limit: Int!
+  offset: Int!
 }
 
 type Query {
+  findAllUser: EntitiesListRes!
   user(id: Int!): User!
-  users: PaginatedUsers!
-  whoAmI: User!
 }
 
-input RegisterInput {
-  email: String!
-  username: String!
-  password: String!
+type SortingDto {
+  prop: String!
+  direction: String!
 }
 
 type User {
@@ -46,4 +39,8 @@ input UserInput {
   email: String!
   username: String!
   password: String!
+}
+
+type UsersFilter {
+  email: String!
 }

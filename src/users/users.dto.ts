@@ -5,6 +5,3 @@ export class UsersDto {
   readonly username: string;
   readonly password: string;
 }
-
-@ArgsType()
-export class UsersFilter {}

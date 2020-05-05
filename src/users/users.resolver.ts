@@ -2,7 +2,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { BaseResolver } from '../common/base/base-entity.resolver';
 import { User } from './user.entity';
-import { UsersFilter } from './users.dto';
+import { UsersFilter } from './users-filter.dto';
 import { UserInput } from './users.input';
 import { UsersService } from './users.service';
 

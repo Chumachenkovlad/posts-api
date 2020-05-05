@@ -1,38 +1,39 @@
 import { Type } from '@nestjs/common';
-import { Args, ArgsType, Field, Query, Resolver } from '@nestjs/graphql';
+import { Field, ObjectType, Query, Resolver } from '@nestjs/graphql';
 
-import { BaseEntitiesListRes } from '../dto/entities-list-res.dto';
-import { BaseEntitiesListArgs } from '../dto/entities-list.args';
-import { IEntitiesListArgs } from '../interfaces/entities-list-args.interface';
-import { IEntitiesResList } from './../interfaces/entities-list-res.interface';
+import { PaginationDto } from '../dto/pagination.dto';
+import { SortingDto } from '../dto/sorting.dto';
 import { BaseEntityService } from './base-entity.service';
 
 export function BaseResolver<
-  T extends Type<unknown>,
+  M extends Type<unknown>,
   D extends object,
-  F extends Type<unknown>
->(modelRef: T, filterRef: F): any {
-  @Resolver({ isAbstract: true })
-  @ArgsType()
-  class EntitiesListArgs extends BaseEntitiesListArgs
-    implements IEntitiesListArgs<F> {
+  T extends Type<unknown>
+>(modelRef: M, filterRef: T): any {
+  @ObjectType()
+  class EntitiesListRes {
     @Field(type => filterRef, { nullable: true })
-    filter: F;
+    filter: T;
+
+    @Field(type => [modelRef], { nullable: true })
+    rows: M[];
+
+    @Field(type => SortingDto, { nullable: true })
+    sorting: SortingDto;
+
+    @Field(type => PaginationDto, { nullable: true })
+    pagination: PaginationDto;
   }
 
-  class EntitiesListRes extends BaseEntitiesListRes<unknown, unknown>(
-    modelRef,
-    filterRef
-  ) {}
-
+  @Resolver({ isAbstract: true })
   abstract class BaseResolverHost {
-    protected entityService: BaseEntityService<T, D, F>;
-
+    protected entityService: BaseEntityService<M, D, T>;
+    //  @Args(`${filterRef.name}Args`) filter: F,
+    //  @Args(`PaginationArgs`) pagination: PaginationArgs,
+    //  @Args(`SortingArgs`) sorting: SortingDto
     @Query(type => EntitiesListRes, { name: `findAll${modelRef.name}` })
-    async findAll(
-      @Args(`${filterRef.name}Args`) args: EntitiesListArgs
-    ): Promise<Partial<IEntitiesResList<T, F>>> {
-      return this.entityService.findAll(args);
+    async findAll(): Promise<EntitiesListRes> {
+      return this.entityService.findAll({}) as Promise<EntitiesListRes>;
     }
   }
   return BaseResolverHost;

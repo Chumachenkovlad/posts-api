@@ -1,4 +1,4 @@
-import { PaginationArgs } from '../dto/pagination.dto';
+import { PaginationArgs } from '../dto/pagination.args';
 import { SortingDto } from '../dto/sorting.dto';
 
 export interface IEntitiesListArgs<T> {

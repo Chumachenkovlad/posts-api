@@ -1,9 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 
-import { UsersDto } from './users.dto';
-
 @InputType()
-export class UserInput extends UsersDto {
+export class UserInput {
   @Field()
   email: string;
   @Field()

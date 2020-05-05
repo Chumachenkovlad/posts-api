@@ -3,7 +3,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { join } from 'path';
 
-import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { UsersModule } from './users/users.module';
@@ -20,8 +19,8 @@ import { UsersModule } from './users/users.module';
     }),
     ConfigModule,
     //PostsModule,
-    UsersModule,
-    AuthModule
+    UsersModule
+    //AuthModule
   ],
   controllers: [],
   providers: []
