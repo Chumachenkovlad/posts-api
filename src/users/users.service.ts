@@ -4,14 +4,14 @@ import { Sequelize } from 'sequelize-typescript';
 
 import { BaseEntityService } from '../common/base/base-entity.service';
 import { User } from './user.entity';
-import { UsersFilter } from './users-filter.dto';
+import { UsersFilterInput } from './users-filter.input';
 import { UsersDto } from './users.dto';
 
 @Injectable()
 export class UsersService extends BaseEntityService<
   User,
   UsersDto,
-  UsersFilter
+  UsersFilterInput
 > {
   constructor(
     @InjectModel(User)

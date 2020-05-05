@@ -2,13 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type EntitiesListRes {
-  filter: UsersFilter
-  rows: [User!]
-  sorting: SortingDto
-  pagination: PaginationDto
-}
-
 type Mutation {
   createUser(userInput: UserInput!): User!
 }
@@ -19,12 +12,22 @@ type PaginationDto {
   offset: Int!
 }
 
+input PaginationInput {
+  limit: Int!
+  offset: Int!
+}
+
 type Query {
-  findAllUser: EntitiesListRes!
+  findAllUser(pagination: PaginationInput!, sorting: SortingInput!, filter: UsersFilterInput!): UserEntitiesListRes!
   user(id: Int!): User!
 }
 
 type SortingDto {
+  prop: String!
+  direction: String!
+}
+
+input SortingInput {
   prop: String!
   direction: String!
 }
@@ -35,12 +38,23 @@ type User {
   email: String!
 }
 
+type UserEntitiesListRes {
+  filter: UsersFilterType
+  rows: [User!]
+  sorting: SortingDto
+  pagination: PaginationDto
+}
+
 input UserInput {
   email: String!
   username: String!
   password: String!
 }
 
-type UsersFilter {
+input UsersFilterInput {
+  email: String!
+}
+
+type UsersFilterType {
   email: String!
 }

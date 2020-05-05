@@ -1,8 +1,10 @@
 import { Type } from '@nestjs/common';
-import { Field, ObjectType, Query, Resolver } from '@nestjs/graphql';
+import { Args, Field, ObjectType, Query, Resolver } from '@nestjs/graphql';
 
 import { PaginationDto } from '../dto/pagination.dto';
 import { SortingDto } from '../dto/sorting.dto';
+import { SortingInput } from '../dto/sorting.input';
+import { PaginationInput } from './../dto/pagination.input';
 import { BaseEntityService } from './base-entity.service';
 
 export function BaseResolver<
@@ -10,19 +12,19 @@ export function BaseResolver<
   D extends object,
   T extends Type<unknown>
 >(modelRef: M, filterRef: T): any {
-  @ObjectType()
+  @ObjectType(`${modelRef.name}EntitiesListRes`)
   class EntitiesListRes {
-    @Field(type => filterRef, { nullable: true })
+    @Field(type => filterRef, { defaultValue: {} })
     filter: T;
 
-    @Field(type => [modelRef], { nullable: true })
+    @Field(type => [modelRef], { defaultValue: [] })
     rows: M[];
 
     @Field(type => SortingDto, { nullable: true })
-    sorting: SortingDto;
+    sorting?: SortingDto;
 
     @Field(type => PaginationDto, { nullable: true })
-    pagination: PaginationDto;
+    pagination?: PaginationDto;
   }
 
   @Resolver({ isAbstract: true })
@@ -32,8 +34,16 @@ export function BaseResolver<
     //  @Args(`PaginationArgs`) pagination: PaginationArgs,
     //  @Args(`SortingArgs`) sorting: SortingDto
     @Query(type => EntitiesListRes, { name: `findAll${modelRef.name}` })
-    async findAll(): Promise<EntitiesListRes> {
-      return this.entityService.findAll({}) as Promise<EntitiesListRes>;
+    async findAll(
+      @Args('filter', { type: () => filterRef }) filter: T,
+      @Args('sorting') sorting: SortingInput,
+      @Args('pagination') pagination: PaginationInput
+    ): Promise<EntitiesListRes> {
+      return this.entityService.findAll({
+        filter,
+        sorting,
+        pagination
+      }) as Promise<EntitiesListRes>;
     }
   }
   return BaseResolverHost;

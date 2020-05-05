@@ -4,7 +4,7 @@ import { Model, Sequelize } from 'sequelize-typescript';
 
 import { ErrorsMap } from '../const/errors.const';
 import { FindAllQuery } from '../dto/find-all-query.dto';
-import { PaginationArgs } from '../dto/pagination.args';
+import { PaginationInput } from '../dto/pagination.input';
 import { IEntitiesListArgs } from '../interfaces/entities-list-args.interface';
 import { IEntitiesResList } from '../interfaces/entities-list-res.interface';
 import { DEFAULT_LIMIT } from './../const/common.const';
@@ -19,7 +19,7 @@ export abstract class BaseEntityService<M, D extends object, F extends object>
   implements OnModuleInit {
   protected defaultQuery: Partial<IEntitiesListArgs<F>> = {};
   protected defaultSorting: Partial<SortingDto> = {};
-  protected defaultPagination: PaginationArgs = {
+  protected defaultPagination: PaginationInput = {
     limit: DEFAULT_LIMIT,
     offset: 0
   };
