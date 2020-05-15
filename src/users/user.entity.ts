@@ -16,6 +16,7 @@ import {
 } from 'sequelize-typescript';
 
 import { ErrorsMap } from '../common/const/errors.const';
+import { Post } from '../posts/post.entity';
 
 const DEFAULT_BYTE_SIZE = 16;
 const DEFAULT_ITERATIONS = 10000;
@@ -55,6 +56,9 @@ export class User extends Model<User> {
   })
   @Field()
   email: string;
+
+  @Field(() => [Post])
+  posts: Post[];
 
   @AllowNull(false)
   @Column({
@@ -113,11 +117,4 @@ export class User extends Model<User> {
       this.hashedPassword = this.encryptPassword(this.password);
     }
   }
-}
-
-@ObjectType()
-export class PaginatedUsers {
-  rows: User[];
-  @Field(() => Int)
-  count: number;
 }

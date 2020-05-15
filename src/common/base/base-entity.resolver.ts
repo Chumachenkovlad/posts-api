@@ -1,5 +1,5 @@
 import { Type } from '@nestjs/common';
-import { Args, Field, ObjectType, Query, Resolver } from '@nestjs/graphql';
+import { Args, Field, Int, Mutation, ObjectType, Query, Resolver } from '@nestjs/graphql';
 
 import { PaginationDto } from '../dto/pagination.dto';
 import { SortingDto } from '../dto/sorting.dto';
@@ -9,9 +9,9 @@ import { BaseEntityService } from './base-entity.service';
 
 export function BaseResolver<
   M extends Type<unknown>,
-  D extends object,
+  D extends Type<unknown>,
   T extends Type<unknown>
->(modelRef: M, filterRef: T): any {
+>(modelRef: M, filterRef: T, entityInputRef: D): any {
   @ObjectType(`${modelRef.name}EntitiesListRes`)
   class EntitiesListRes {
     @Field(type => filterRef, { defaultValue: {} })
@@ -30,12 +30,10 @@ export function BaseResolver<
   @Resolver({ isAbstract: true })
   abstract class BaseResolverHost {
     protected entityService: BaseEntityService<M, D, T>;
-    //  @Args(`${filterRef.name}Args`) filter: F,
-    //  @Args(`PaginationArgs`) pagination: PaginationArgs,
-    //  @Args(`SortingArgs`) sorting: SortingDto
+
     @Query(type => EntitiesListRes, { name: `findAll${modelRef.name}` })
     async findAll(
-      @Args('filter', { type: () => filterRef }) filter: T,
+      @Args('filter', { type: () => filterRef, nullable: true }) filter: T,
       @Args('sorting') sorting: SortingInput,
       @Args('pagination') pagination: PaginationInput
     ): Promise<EntitiesListRes> {
@@ -44,6 +42,26 @@ export function BaseResolver<
         sorting,
         pagination
       }) as Promise<EntitiesListRes>;
+    }
+
+    @Query(type => modelRef, { name: `get${modelRef.name}` })
+    async getOne(@Args('id', { type: () => Int }) id: number): Promise<M> {
+      return this.entityService.findById(id);
+    }
+
+    @Mutation(type => modelRef, { name: `create${modelRef.name}` })
+    async create(
+      @Args('entityDto', { type: () => entityInputRef }) entityDto: D
+    ): Promise<M> {
+      return this.entityService.create(entityDto);
+    }
+
+    @Mutation(type => modelRef, { name: `update${modelRef.name}` })
+    async update(
+      @Args('id', { type: () => Int }) id: number,
+      @Args('entityDto', { type: () => entityInputRef }) entityDto: D
+    ): Promise<M> {
+      return this.entityService.update(id, entityDto);
     }
   }
   return BaseResolverHost;

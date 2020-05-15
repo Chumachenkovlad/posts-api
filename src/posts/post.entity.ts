@@ -30,9 +30,14 @@ export class Post extends Model<Post> {
   @Field()
   title: string;
 
-  @Length({ min: 50, max: 1000, msg: ErrorsMap.LENGTH })
+  @Length({ min: 10, max: 1000, msg: ErrorsMap.LENGTH })
   @NotEmpty({ msg: ErrorsMap.REQUIRED })
   @Column
   @Field()
   body: string;
+
+  @Field(() => Int, { nullable: false })
+  @NotEmpty({ msg: ErrorsMap.REQUIRED })
+  @Column
+  authorId: number;
 }

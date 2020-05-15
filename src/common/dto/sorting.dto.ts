@@ -1,7 +1,7 @@
 import { ArgsType, Field, ObjectType } from '@nestjs/graphql';
 
 @ArgsType()
-@ObjectType()
+@ObjectType('SortingType')
 export class SortingDto {
   @Field()
   prop: string;

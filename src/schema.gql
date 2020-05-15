@@ -2,8 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthPayload {
+  token: String!
+  expires: String!
+  user: User!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
-  createUser(userInput: UserInput!): User!
+  createUser(entityDto: UserInput!): User!
+  updateUser(entityDto: UserInput!, id: Int!): User!
+  login(loginInput: LoginInput!): AuthPayload!
+  register(registerInput: RegisterInput!): AuthPayload!
+  createPost(postDto: PostInput!): Post!
+  updatePost(entityDto: PostInput!, id: Int!): Post!
 }
 
 type PaginationDto {
@@ -17,17 +33,52 @@ input PaginationInput {
   offset: Int!
 }
 
-type Query {
-  findAllUser(pagination: PaginationInput!, sorting: SortingInput!, filter: UsersFilterInput!): UserEntitiesListRes!
-  user(id: Int!): User!
+type Post {
+  id: Int!
+  title: String!
+  body: String!
+  authorId: Int!
 }
 
-type SortingDto {
+type PostEntitiesListRes {
+  filter: PostsFilterType
+  rows: [Post!]
+  sorting: SortingType
+  pagination: PaginationDto
+}
+
+input PostInput {
+  title: String!
+  body: String!
+}
+
+input PostsFilterInput {
+  authorId: Int!
+}
+
+type PostsFilterType {
+  authorId: Int!
+}
+
+type Query {
+  findAllUser(pagination: PaginationInput!, sorting: SortingInput!, filter: UsersFilterInput): UserEntitiesListRes!
+  getUser(id: Int!): User!
+  findAllPost(pagination: PaginationInput!, sorting: SortingInput!, filter: PostsFilterInput): PostEntitiesListRes!
+  getPost(id: Int!): Post!
+}
+
+input RegisterInput {
+  email: String!
+  username: String!
+  password: String!
+}
+
+input SortingInput {
   prop: String!
   direction: String!
 }
 
-input SortingInput {
+type SortingType {
   prop: String!
   direction: String!
 }
@@ -36,12 +87,13 @@ type User {
   id: Int!
   username: String!
   email: String!
+  posts: [Post!]!
 }
 
 type UserEntitiesListRes {
   filter: UsersFilterType
   rows: [User!]
-  sorting: SortingDto
+  sorting: SortingType
   pagination: PaginationDto
 }
 

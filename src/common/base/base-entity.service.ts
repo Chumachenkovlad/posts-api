@@ -70,11 +70,12 @@ export abstract class BaseEntityService<M, D extends object, F extends object>
 
     const { rows, count } = await this.model.findAndCountAll({
       raw: true,
+      limit: pagination.limit,
+      offset: pagination.offset,
       where: {
-        ...pagination,
         ...(filter || {})
       },
-      order: sorting ? [sorting.prop, sorting.direction] : []
+      order: sorting ? [[sorting.prop, sorting.direction]] : []
     });
 
     return {

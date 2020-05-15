@@ -10,13 +10,18 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation(returns => AuthPayload)
-  async login(@Args('loginInput') loginInput: LoginInput) {
+  async login(
+    @Args('loginInput') loginInput: LoginInput
+  ): Promise<AuthPayload> {
     const { email, password } = loginInput;
     return this.authService.login(email, password);
   }
 
   @Mutation(returns => AuthPayload)
-  async register(@Args('registerInput') registerInput: RegisterInput) {
+  async register(
+    @Args('registerInput', { type: () => RegisterInput })
+    registerInput: RegisterInput
+  ) {
     return this.authService.register(registerInput);
   }
 }

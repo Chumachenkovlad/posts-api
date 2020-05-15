@@ -4,14 +4,15 @@ import { Sequelize } from 'sequelize-typescript';
 
 import { BaseEntityService } from '../common/base/base-entity.service';
 import { SortingDto } from './../common/dto/sorting.dto';
-import { PostDto, PostsFilter } from './post.dto';
+import { PostDto } from './post.dto';
 import { Post } from './post.entity';
+import { PostsFilterInput } from './posts-filter.input';
 
 @Injectable()
 export class PostsService extends BaseEntityService<
   Post,
   PostDto,
-  PostsFilter
+  PostsFilterInput
 > {
   protected defaultSorting: SortingDto = {
     prop: 'title',
@@ -24,5 +25,9 @@ export class PostsService extends BaseEntityService<
     sequelize: Sequelize
   ) {
     super(model, sequelize);
+  }
+
+  async create(dto: PostDto & { authorId: number }): Promise<Post> {
+    return this.model.create(dto, { raw: true });
   }
 }

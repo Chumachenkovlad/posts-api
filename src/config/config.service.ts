@@ -2,6 +2,7 @@ import { SequelizeModuleOptions, SequelizeOptionsFactory } from '@nestjs/sequeli
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 
+import { Post } from '../posts/post.entity';
 import { User } from '../users/user.entity';
 import { ConfigKeys } from './config.const';
 
@@ -50,7 +51,7 @@ export class ConfigService implements SequelizeOptionsFactory {
       database: this.get(ConfigKeys.DB_DATABASE),
       autoLoadModels: true,
       synchronize: true,
-      models: [User]
+      models: [User, Post]
     };
   }
 }
