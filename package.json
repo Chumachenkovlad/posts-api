@@ -35,7 +35,7 @@
         "@nestjs/platform-express": "^7.0.0",
         "@nestjs/sequelize": "^0.1.0",
         "@types/graphql": "^14.5.0",
-        "apollo-server-express": "^2.12.0",
+        "apollo-server-express": "^2.14.2",
         "dotenv": "^8.2.0",
         "graphql": "14.6.0",
         "graphql-subscriptions": "^1.1.0",
